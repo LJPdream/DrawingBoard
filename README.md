@@ -1,2 +1,3 @@
 # DrawingBoard
-This is a drawing board exercise, using xamarin to do cross platform development, there will be IOS and Android version, you can learn some xamarin technology.
+
+There will be IOS and Android version through a training project of drawing boards, using xamarin as a cross-platform development. You can learn some xamarin technology by the training project.
