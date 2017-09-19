@@ -38,6 +38,41 @@ namespace DrawingBoard.ios.View
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
             base.TouchesBegan(touches, evt);
+            UITouch touch = touches.AnyObject as UITouch;
+            this.fingerDraw = true;
+            this.touchLocation = (PointF)touch.LocationInView(this);
+            this.previousTouchLocation = (PointF)touch.PreviousLocationInView(this);
+            this.SetNeedsDisplay(); //更新视图
         }
+
+        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        {
+            base.TouchesMoved(touches, evt);
+            UITouch touch = touches.AnyObject as UITouch;
+            this.touchLocation = (PointF)touch.LocationInView(this);
+            this.previousTouchLocation = (PointF)touch.PreviousLocationInView(this);
+            this.SetNeedsDisplay();
+        }
+
+        public override void Draw(CGRect rect)
+        {
+            base.Draw(rect);
+            if (this.fingerDraw)
+            {
+                using (CGContext context = UIGraphics.GetCurrentContext())
+                {
+                    context.SetStrokeColor(UIColor.Blue.CGColor);
+                    context.SetLineWidth(5f);
+                    context.SetLineJoin(CGLineJoin.Round);
+                    context.SetLineCap(CGLineCap.Round);
+                    this.drawPath.MoveToPoint(this.previousTouchLocation);
+                    this.drawPath.AddLineToPoint(this.touchLocation);
+                    context.AddPath(this.drawPath);
+                    context.DrawPath(CGPathDrawingMode.Stroke);
+                }
+            }
+        }
+
+       
     }
 }
