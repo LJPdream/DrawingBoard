@@ -31,7 +31,7 @@ namespace DrawingBoard.ios.View
         }
 
         /// <summary>
-        /// 触屏开始
+        /// 触屏开始，该方法只会被调用一次（刚就开始触屏的时候）
         /// </summary>
         /// <param name="touches"></param>
         /// <param name="evt"></param>
@@ -40,18 +40,25 @@ namespace DrawingBoard.ios.View
             base.TouchesBegan(touches, evt);
             UITouch touch = touches.AnyObject as UITouch;
             this.fingerDraw = true;
+            //绘制开始点
             this.touchLocation = (PointF)touch.LocationInView(this);
             this.previousTouchLocation = (PointF)touch.PreviousLocationInView(this);
             this.SetNeedsDisplay(); //更新视图
         }
 
+        /// <summary>
+        /// 移动手势，多次调用
+        /// </summary>
+        /// <param name="touches"></param>
+        /// <param name="evt"></param>
         public override void TouchesMoved(NSSet touches, UIEvent evt)
         {
             base.TouchesMoved(touches, evt);
             UITouch touch = touches.AnyObject as UITouch;
+            //绘制移动实时路径
             this.touchLocation = (PointF)touch.LocationInView(this);
             this.previousTouchLocation = (PointF)touch.PreviousLocationInView(this);
-            this.SetNeedsDisplay();
+            this.SetNeedsDisplay();//更新视图，不断调用Draw方法
         }
 
         public override void Draw(CGRect rect)
