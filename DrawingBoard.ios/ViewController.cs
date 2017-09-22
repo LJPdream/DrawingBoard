@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DrawingBoard.ios.View;
+using System;
 
 using UIKit;
 
@@ -13,6 +14,7 @@ namespace DrawingBoard.ios
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            View = new CanvasUIView();
             // Perform any additional setup after loading the view, typically from a nib.
 
         }

@@ -26,7 +26,7 @@ namespace DrawingBoard.ios.View
 
         void Initialize()
         {
-            //BackgroundColor = UIColor.Red;
+            BackgroundColor = UIColor.White;
             this.drawPath = new CGPath();
         }
 
@@ -61,6 +61,10 @@ namespace DrawingBoard.ios.View
             this.SetNeedsDisplay();//更新视图，不断调用Draw方法
         }
 
+        /// <summary>
+        /// 更新界面时重绘
+        /// </summary>
+        /// <param name="rect"></param>
         public override void Draw(CGRect rect)
         {
             base.Draw(rect);
@@ -80,6 +84,38 @@ namespace DrawingBoard.ios.View
             }
         }
 
-       
+        /// <summary>
+        /// 获取绘制的图像，用于保存到图库
+        /// </summary>
+        /// <returns></returns>
+        public UIImage GetDrawingImage()
+        {
+            UIImage toReturn = null;
+
+            UIGraphics.BeginImageContext(this.Bounds.Size);
+            using (CGContext context = UIGraphics.GetCurrentContext())
+            {
+                context.SetStrokeColor(UIColor.Red.CGColor);
+                context.SetLineWidth(10f);
+                context.SetLineJoin(CGLineJoin.Round);
+                context.SetLineCap(CGLineCap.Round);
+                context.AddPath(this.drawPath);
+                context.DrawPath(CGPathDrawingMode.Stroke);
+                toReturn = UIGraphics.GetImageFromCurrentImageContext();
+            }
+            return toReturn;
+        }
+
+
+        /// <summary>
+        /// 清除所有绘制
+        /// </summary>
+        public void ClearDrawing()
+        {
+            this.fingerDraw = false;
+            this.drawPath.Dispose();
+            this.drawPath = new CGPath();
+            this.SetNeedsDisplay();
+        }
     }
 }
